@@ -99,6 +99,7 @@ export default {
     },
   },
   created: function () {
+    console.log(process.env.VUE_APP_API_URL);
     if (this.livelists.length == 0) {
       this.getLiveList();
     }
@@ -106,7 +107,7 @@ export default {
   methods: {
     getLiveList() {
       this.axios
-        .get("http://localhost:8000/api/live/")
+        .get(process.env.VUE_APP_API_URL + "live/")
         .then((response) => {
           this.$store.dispatch("setLiveList", { liveLists: response.data });
         })

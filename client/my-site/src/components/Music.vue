@@ -112,7 +112,7 @@ export default {
   methods: {
     getAlbumList() {
       this.axios
-        .get("http://localhost:8000/api/album/")
+        .get(process.env.VUE_APP_API_URL + "album/")
         .then((response) => {
           this.$store.dispatch("setAlbumList", { albumLists: response.data });
         })

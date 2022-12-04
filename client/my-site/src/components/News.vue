@@ -133,7 +133,7 @@ export default {
   methods: {
     getNewsList() {
       this.axios
-        .get("http://localhost:8000/api/news/")
+        .get(process.env.VUE_APP_API_URL + "news/")
         .then((response) => {
           this.$store.dispatch("setNewsList", { newsLists: response.data });
         })

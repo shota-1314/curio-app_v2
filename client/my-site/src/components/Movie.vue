@@ -96,7 +96,7 @@ export default {
   methods: {
     getMovieList() {
       this.axios
-        .get("http://localhost:8000/api/movie/")
+        .get(process.env.VUE_APP_API_URL + "movie/")
         .then((response) => {
           this.$store.dispatch("setMovieList", { movieLists: response.data });
         })

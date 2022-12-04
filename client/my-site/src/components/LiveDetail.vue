@@ -159,7 +159,7 @@ export default {
   methods: {
     getLiveList() {
       this.axios
-        .get("http://localhost:8000/api/live/")
+        .get(process.env.VUE_APP_API_URL + "live/")
         .then((response) => {
           this.$store.dispatch("setLiveList", { liveLists: response.data });
         })
