@@ -1,79 +1,105 @@
 <template>
-  <v-container class="fill-height">
-    <v-responsive class="d-flex align-center text-center fill-height">
-      <v-img
-        contain
-        height="300"
-        src="src/assets/logo.svg"
-      />
-
-      <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
-
-      <h1 class="text-h2 font-weight-bold">Vuetify</h1>
-
-      <div class="py-14" />
-
-      <v-row class="d-flex align-center justify-center">
-        <v-col cols="auto">
-          <v-btn
-            href="https://next.vuetifyjs.com/components/all/"
-            min-width="164"
-            rel="noopener noreferrer"
-            target="_blank"
-            variant="text"
-          >
-            <v-icon
-              icon="mdi-view-dashboard"
-              size="large"
-              start
-            />
-
-            Components
-          </v-btn>
-        </v-col>
-
-        <v-col cols="auto">
-          <v-btn
-            color="primary"
-            href="https://next.vuetifyjs.com/introduction/why-vuetify/#feature-guides"
-            min-width="228"
-            rel="noopener noreferrer"
-            size="x-large"
-            target="_blank"
-            variant="flat"
-          >
-            <v-icon
-              icon="mdi-speedometer"
-              size="large"
-              start
-            />
-
-            Get Started
-          </v-btn>
-        </v-col>
-
-        <v-col cols="auto">
-          <v-btn
-            href="https://community.vuetifyjs.com/"
-            min-width="164"
-            rel="noopener noreferrer"
-            target="_blank"
-            variant="text"
-          >
-            <v-icon
-              icon="mdi-account-group"
-              size="large"
-              start
-            />
-
-            Community
-          </v-btn>
+  <div>
+    <v-img
+      :height="cardHeight"
+      class="position-relative"
+      gradient="to top right, rgba(0,0,8,0.6629245448179272), rgba(0,0,0,0.10270045518207283)"
+      src="@/assets/images/artist.jpeg"
+    >
+      <v-row justify="center">
+        <v-col class="text-center" cols="12">
+          <div>
+            <v-img
+              class="mx-auto position-absolute"
+              width="60%"
+              contain
+              src="@/assets/images/logo_type.svg"
+            ></v-img>
+          </div>
         </v-col>
       </v-row>
-    </v-responsive>
-  </v-container>
+    </v-img>
+    <NewsList :topPage="true" />
+    <LiveList :topPage="true" />
+    <MusicList :topPage="true" />
+    <MovieList :topPage="true" />
+  </div>
 </template>
 
-<script setup lang="ts">
-  //
+<script>
+import LiveList from "../components/Live";
+import MusicList from "../components/Music";
+import NewsList from "../components/News";
+import MovieList from "../components/Movie";
+export default {
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    LiveList,
+    MusicList,
+    NewsList,
+    MovieList,
+  },
+  name: "HelloWorld",
+
+  data: () => ({
+    livelists: [],
+    model: null,
+    dayList: ["日", "月", "火", "水", "木", "金", "土"],
+  }),
+  created: function () {
+    this.getLiveList();
+  },
+  computed: {
+    cardHeight: function () {
+      let val = 750;
+      if (this.$vuetify.breakpoint.xs) {
+        val = 500;
+      }
+      return val;
+    },
+  },
+  methods: {
+    getLiveList() {
+      this.axios
+        .get("http://localhost:8000/api/live/")
+        .then((response) => {
+          this.livelists = response.data;
+        })
+        .catch((e) => {
+          alert(e);
+        });
+    },
+    goGoogleMap(address) {
+      let url = "'https://maps.google.co.jp/maps/search/'" + address;
+      window.open(url, "_blank");
+    },
+    convertDate(date) {
+      let dateObj = new Date(date);
+      let dateYear = dateObj.getFullYear();
+      let dateMonth = dateObj.getMonth() + 1;
+      let dateDate = dateObj.getDate();
+      let dateDay = dateObj.getDay();
+      let newDate =
+        dateYear +
+        "年" +
+        dateMonth +
+        "月" +
+        dateDate +
+        "日(" +
+        this.dayList[dateDay] +
+        ")";
+      return newDate;
+    },
+  },
+};
 </script>
+<style>
+.position-relative {
+  position: relative !important;
+}
+.position-absolute {
+  position: absolute !important;
+  left: 20%;
+  top: 45%;
+}
+</style>
